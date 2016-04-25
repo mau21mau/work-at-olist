@@ -47,3 +47,6 @@ tramp
 Thumbs.db
 Desktop.ini
 
+# Linux
+*.fuse*
+

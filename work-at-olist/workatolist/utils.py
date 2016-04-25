@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 def flat_tree_from_csv(file_name):
-    """ Generates a flat tree [list] of the provided csv path. """
+    """ Generates a flat tree <list> of the provided csv path. """
     try:
         with open(file_name) as file:
             spamreader = csv.reader(file, delimiter='"', quotechar='|')
