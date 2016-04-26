@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from workatolist import utils
 
 
 class Category(models.Model):
