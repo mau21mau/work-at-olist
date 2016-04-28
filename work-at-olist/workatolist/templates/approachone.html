@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id="content-wrapper">
+        <div id="header">
+            <h1>Approach One</h1>
+            <h2>Channel</h2>
+            <p>The API URL for displaying all the channels is <span class="docs">
+                <a href="approachone/rest/channels/">/approachone/rest/channels/?document=json</a></span>.
+            </p>
+            <p>The API url for displaying a single Channel is the following:</p>
+            <span class="docs">/approachone/rest/channel/?uid=key-for-the-channel&document=json</span>
+
+            <h2>Category</h2>
+            <p>The Category url for the rest api is the following:</p>
+            <span class="docs">/approachone/rest/category/?uid=key-for-the-category&document=json</span>
+
+            <p><b>PS.: </b>The values for <span class="docs">document</span> parameter are <span class="docs">json</span> or
+                <span class="docs">xml</span>. Being the first the default, so it's not mandatory.
+            </p>
+            <p class="tip"><b>*Tip:</b> click the little arrows beside the nodes on the tree to display the output from the REST API.</p>
+        </div>
+        <div id="tree-wrapper">
+            <a class="call-api all" href="approachone/rest/channels/?document=json">All Channels =></a>
+            <ul id="channels" class="tree"></ul>
+        </div>
+        <div id="api-response-wrapper">
+            <a id="api-url" href="" target="_blank"></a>
+            <pre id="api-response"></pre>
+        </div>
+        <div class="clear"></div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+
+    </script>
+{% endblock %}
