@@ -1,3 +1,5 @@
+from workatolist.settings.base import *
+
 DEBUG = False
 DATABASES = {
     'default': {
