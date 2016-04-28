@@ -1,0 +1,7 @@
+{
+  "name": "Work At Olist Job Application Test",
+  "description": "A Django for a simple Channel and Categories management.",
+  "image": "heroku/python",
+  "repository": "https://github.com/mau21mau/work-at-olist",
+  "keywords": ["python", "django" ],
+}
