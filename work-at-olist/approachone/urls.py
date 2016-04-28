@@ -11,5 +11,5 @@ urlpatterns = [
 
 """ WEBSITE """
 urlpatterns += [
-    url(r'channels/$', views.list_channel),
+    url(r'$', views.approach_one_view),
 ]

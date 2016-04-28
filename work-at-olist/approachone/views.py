@@ -5,9 +5,9 @@ from django.shortcuts import render
 from .models import Category, Channel
 
 
-def list_channel(request):
+def approach_one_view(request):
     channels = Channel.objects.all()
-    return render(request, 'channels.html', {'channels': channels})
+    return render(request, 'approachone.html', {'channels': channels})
 
 
 """

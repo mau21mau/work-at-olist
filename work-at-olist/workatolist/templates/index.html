@@ -1,15 +1,22 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>I want to be part of Olist! :)</h1>
-    <p>
-        My test conteins two different approaches. At the first one I haven't used any special libraries such as mptt or
-        django-rest-framework.
-    </p>
-    <p>
-        During the time I worked with Django CMS (django-cms), I wondered how did they manage to handle trees for their
-        page system. I found that they used django-mptt and decided to take a look at it. So when I saw this test
-        proposed by you guys, I had the idea to implement it using this module. Although is came to my mind it would be
-        nice to implement a traditional Adjacency List Model method for benchmark against MPTT method.
-    </p>
-    <h2><a href="/approachone/channels/">Approach one</a></h2>
+    <div id="content-wrapper">
+        <div id="header" class="header-index">
+            <h1 class="index">I want to be part of Olist! :)</h1>
+            <p>
+                My test contains two different approaches. At the first one I haven't used any special libraries such as mptt or
+                django-rest-framework.
+            </p>
+            <p>
+                During the time I worked with Django CMS (django-cms), I wondered how did they manage to handle trees for their
+                page system. I found that they used django-mptt and decided to take a look at it. So when I saw this test
+                proposed by you guys, I had the idea to implement it using this module. Although is came to my mind it would be
+                nice to implement a traditional Adjacency List Model method for benchmark against MPTT method.
+            </p>
+            <div class="btn-wrapper">
+                <h2 class="btn-start"><a href="/approachone/">Approach One</a></h2>
+                <h2 class="btn-start"><a href="/approachtwo/">Approach Two</a></h2>
+            </div>
+        </div>
+    </div>
 {% endblock %}
