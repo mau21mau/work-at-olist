@@ -1,5 +1,6 @@
 # Project local settings
-work-at-olist/workatolist/settings.txt
+workatolist/workatolist/staticfiles/*
+workatolist/workatolist/staticfiles/!.gitkeep
 
 # Python bytecode:
 *.py[co]
