@@ -3,6 +3,7 @@ Utils file for helper function.
 """
 import logging
 import csv
+import base64
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -47,10 +48,39 @@ def is_in(path, tree):
     return False
 
 
-def try_catch_index(listinstance, indexes, default=None):
+def try_catch_index(list_instance, indexes, default=None):
     for i in indexes:
         try:
-            listinstance = listinstance.copy()[i]
+            list_instance = list_instance.copy()[i]
         except Exception as e:
             return default
-    return listinstance
+    return list_instance
+
+
+def encrypt(key, message):
+    """
+    :param <str> key: string password for resolving the encryption
+    :param <str> message: message to be encrypted
+    :return: <str>: token string with the message encrypted
+    """
+    enc = []
+    for i in range(len(message)):
+        key_c = key[i % len(key)]
+        enc_c = (ord(message[i]) + ord(key_c)) % 256
+        enc.append(enc_c)
+    return base64.urlsafe_b64encode(bytes(enc))
+
+
+def decrypt(key, token):
+    """
+    :param <str> key: string password for resolving the encryption
+    :param <str> token: encrypted message to be resolved
+    :return <str>: the decrypted message
+    """
+    dec = []
+    token = base64.urlsafe_b64decode(token)
+    for i in range(len(token)):
+        key_c = key[i % len(key)]
+        dec_c = chr((256 + token[i] - ord(key_c)) % 256)
+        dec.append(dec_c)
+    return "".join(dec)

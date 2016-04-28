@@ -11,11 +11,11 @@ class Category(models.Model):
         return self.name
 
     def id_key(self):
-        return settings.KEY_RESOLVER.encrypt(b'%d' % self.id)
+        return utils.encrypt(settings.SECRET_KEY, '%d' % self.id)
 
     @staticmethod
     def category_from_key(key):
-        dbid = settings.KEY_RESOLVER.decrypt(bytes(key, encoding="utf-8"))
+        dbid = utils.decrypt(settings.SECRET_KEY, key)
         return Category.objects.get(pk=dbid)
 
     def has_children(self):
@@ -25,7 +25,12 @@ class Category(models.Model):
     def children(self):
         return Category.objects.filter(parent=self)
 
-    def get_tree_recursive(self):
+    def get_tree(self):
+        tree = self.get_children_recursive()
+        tree['parents'] = self.get_parents_recursive()
+        return tree
+
+    def get_children_recursive(self):
         """
         Generates a tree of categories
         This approach is simple and elegant, but it's inefficient for 2 reasons:
@@ -34,11 +39,25 @@ class Category(models.Model):
         """
 
         children = self.children()
-        tree = {'name': self.name, 'children': []}
+        tree = {
+            'name': self.name,
+            'children': [],
+            'uuid': self.id_key().decode("utf-8")
+        }
         for child in children:
-            tree['children'].append(child.get_tree_recursive())
-
+            tree['children'].append(child.get_children_recursive())
         return tree
+
+    def get_parents_recursive(self, parents=None):
+        parent_attrs = {}
+        parents = [] if not parents else parents
+        if self.parent:
+            parent_attrs['name'] = self.parent.name
+            parent_attrs['uui'] = self.parent.id_key().decode("utf-8")
+            parents.append(parent_attrs)
+            self.parent.get_parents_recursive(parents)
+        return parents
+
 
 
 class Channel(models.Model):
@@ -49,9 +68,12 @@ class Channel(models.Model):
         return self.name
 
     def id_key(self):
-        return settings.KEY_RESOLVER.encrypt(b'%d' % self.id)
+        return utils.encrypt(settings.SECRET_KEY, '%d' % self.id)
 
     @staticmethod
     def channel_from_key(key):
-        dbid = settings.KEY_RESOLVER.decrypt(bytes(key, encoding="utf-8"))
+        dbid = utils.decrypt(settings.SECRET_KEY, key)
         return Channel.objects.get(pk=dbid)
+
+    def root_categories(self):
+        return self.category_set.filter(parent__isnull=True)
