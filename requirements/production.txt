@@ -1,5 +1,4 @@
-Django
+django==1.9.2
 psycopg2
-prettyconf
-dj-database-url
-djangorestframework
+# dj-database-url
+# djangorestframework

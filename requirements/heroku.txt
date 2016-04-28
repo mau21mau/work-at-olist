@@ -1,3 +1,2 @@
 -r production.txt
 gunicorn
-Django==1.9.2
