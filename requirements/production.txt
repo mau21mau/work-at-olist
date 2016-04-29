@@ -1,4 +1,6 @@
 django==1.9.2
 psycopg2
+dicttoxml==1.6.6
+whitenoise
 # dj-database-url
 # djangorestframework
