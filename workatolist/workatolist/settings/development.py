@@ -1,4 +1,4 @@
-from workatolist.settings.base import *
+from .base import *
 
 DEBUG = False
 DATABASES = {
