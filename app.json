@@ -4,4 +4,5 @@
   "image": "heroku/python",
   "repository": "https://github.com/mau21mau/work-at-olist",
   "keywords": ["python", "django" ],
+  "addons": [ "heroku-postgresql" ],
 }
