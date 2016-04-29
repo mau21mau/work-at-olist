@@ -1,21 +1,28 @@
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DEBUG = True
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'ld7s4bcrf)mso_*y^mnnfrr=fh&)4gs$*e%-acjxw5nyulpioz'
 
-
 # SECURITY WARNING: don't run with debug turned on in production!
 
 ALLOWED_HOSTS = ["*"]
 
-
-# Application definition
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': 'gyivfgphwlreqd',
+        'NAME': 'dd82k0hbk4mff5',
+        'PASSWORD': 'master',
+        'HOST': 'ec2-54-204-41-70.compute-1.amazonaws.com',
+        'PORT': '5432',
+    }
+}
 
 INSTALLED_APPS = [
     'django.contrib.admin',
