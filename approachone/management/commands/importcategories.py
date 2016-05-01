@@ -14,20 +14,24 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         channel_name = options['channel_name'][0]
         file_path = options['file'][0]
-        channel_qs = Channel.objects.filter(name=channel_name)
+        file = open(file_path)
+        self.override_categories(channel_name, file)
+
+    def override_categories(self, channel, file):
+        """ Given a csv file object, it will override Channel's category_set with the categories on it. """
+        flat_tree = utils.flat_tree_from_csv(file)
+        print(flat_tree)
+
+        channel_qs = Channel.objects.filter(name=channel)
         if channel_qs:
             channel = channel_qs[0]
             self.stdout.write(self.style.SUCCESS(u'Updating existing Channel "%s"' % channel.name))
         else:
-            channel = Channel(name=channel_name)
+            channel = Channel(name=channel)
             channel.save()
             self.stdout.write(self.style.SUCCESS(u'Created Channel "%s"' % channel.name))
-        self.override_categories(channel, file_path)
-
-    def override_categories(self, channel, file_path):
-        """ Given a csv file, it will override Channel's category_set with the categories on it. """
-        flat_tree = utils.flat_tree_from_csv(file_path)
         channel.category_set.all().delete()
+
         # If the first row is the column head/title it will skip the first loop iteration.
         if len(flat_tree[0]) > 0:
             if flat_tree[0][0] == 'Category':

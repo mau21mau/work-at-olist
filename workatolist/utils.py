@@ -8,25 +8,20 @@ import base64
 logger = logging.getLogger(__name__)
 
 
-def flat_tree_from_csv(file_name):
-    """ Generates a flat tree <list> of the provided csv path. """
-    try:
-        with open(file_name) as file:
-            spamreader = csv.reader(file, delimiter='"', quotechar='|')
-            tree = []
-            for row in spamreader:
-                columns = row[0].split(',')
-                for col in columns:
-                    # In case the csv file has many columns, finds out the index of
-                    # Category
-                    if col == 'Category':
-                        category_index = columns.index(col)
-                        break
-                tree.append(columns[category_index].split(' / '))
-            return tree
-    except Exception as e:
-        print(e)
-        logger.error(e)
+def flat_tree_from_csv(file):
+    """ Generates a flat tree <list> from a csv file object already opened. """
+    spamreader = csv.reader(file, delimiter='"', quotechar='|')
+    tree = []
+    for row in spamreader:
+        columns = row[0].split(',')
+        for col in columns:
+            # In case the csv file has many columns, finds out the index of
+            # Category
+            if col == 'Category':
+                category_index = columns.index(col)
+                break
+        tree.append(columns[category_index].split(' / '))
+    return tree
 
 
 def is_in(path, tree):
