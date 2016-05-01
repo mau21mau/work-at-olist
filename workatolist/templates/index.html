@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div id="content-wrapper">
-        <div id="header" class="header-index">
-            <h1 class="index">I want to be part of Olist! :)</h1>
+    <div class="content-wrapper home">
+        <header class="header">
+            <h1>I want to be part of Olist! :)</h1>
             <p>
                 My test contains two different approaches. At the first one I haven't used any special libraries such as mptt or
                 django-rest-framework.
@@ -14,9 +14,9 @@
                 nice to implement a traditional Adjacency List Model method for benchmark against MPTT method.
             </p>
             <div class="btn-wrapper">
-                <h2 class="btn-start"><a href="/approachone/">Approach One</a></h2>
-                <h2 class="btn-start"><a href="/approachtwo/">Approach Two</a></h2>
+                <a class="btn-start" href="/approachone/">Approach One</a>
+                <a class="btn-start" href="/approachtwo/">Approach Two</a>
             </div>
-        </div>
+        </header>
     </div>
 {% endblock %}

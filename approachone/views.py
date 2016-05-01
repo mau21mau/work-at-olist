@@ -1,13 +1,26 @@
+import io
 import json
 import dicttoxml
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Category, Channel
+from core.forms import ImportCsvForm
+from approachone.management.commands.importcategories import Command
 
 
 def approach_one_view(request):
+    if request.method == 'POST':
+        form = ImportCsvForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            file = io.StringIO(request.FILES['file'].read().decode('utf-8'))
+            channel = request.POST['channel']
+            c = Command()
+            c.override_categories(channel, file)
+        return render(request, 'upload_form.html', {'form': form})
+    else:
+        form = ImportCsvForm()
     channels = Channel.objects.all()
-    return render(request, 'approachone.html', {'channels': channels})
+    return render(request, 'approachone.html', {'channels': channels, 'form': form})
 
 
 """

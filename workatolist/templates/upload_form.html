@@ -1,0 +1,8 @@
+{% csrf_token %}
+{% for field in form %}
+    <div class="field-wrapper{% if forloop.first %} first{% elif forloop.last %} last{% endif %}">
+        <span class="error">{{ field.errors.as_text }}</span>
+        {{ field.label_tag }}
+        {{ field }}
+    </div>
+{% endfor %}
