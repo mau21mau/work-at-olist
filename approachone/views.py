@@ -16,6 +16,7 @@ def approach_one_view(request):
             channel = request.POST['channel']
             c = Command()
             c.override_categories(channel, file)
+            form = ImportCsvForm()
         return render(request, 'upload_form.html', {'form': form})
     else:
         form = ImportCsvForm()

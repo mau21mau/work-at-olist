@@ -50,14 +50,8 @@ class Command(BaseCommand):
                     channel.category_set.add(category)
                     saved_categories_row.append(category)
                 else:
-                    index_parent = current_row.index(column) - 1
-                    # Parent from this entry on the current path
-                    strparent = current_row[index_parent] if index_parent >= 0 else None
-                    path = []
-                    if strparent:
-                        path.append(strparent)
-                    path.append(column)
                     # check if the current entry was not saved yet.
+                    path = current_row[0:j + 1]
                     if i - 2 < 0 or j - 1 < 0:
                         parent = None
                     else:

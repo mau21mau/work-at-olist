@@ -95,6 +95,39 @@ p.tip {
     width: 25%;
 }
 
+#tree-wrapper span {
+    display: block;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 15px;
+    text-align: center;
+}
+
+.tree-wrapper-overlay {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.1);
+    top: 0;
+    left: 0;
+}
+
+.loading{
+    position: absolute;
+    width: 66px;
+    height: 66px;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
 #api-response-wrapper {
     width: 70%;
     margin-left: 0.5%;
