@@ -19,7 +19,7 @@ DATABASES = {
         'USER': 'ksqgiwzajyekoj',
         'NAME': 'd8bkb7e81gqs8',
         'PASSWORD': 'hp2EPz5-pZUR47ZnWbm0zY2EDU',
-        'HOST': 'ec2-54-204-41-70.compute-1.amazonaws.com',
+        'HOST': 'postgres://ksqgiwzajyekoj:hp2EPz5-pZUR47ZnWbm0zY2EDU@ec2-107-22-253-198.compute-1.amazonaws.com:5432/d8bkb7e81gqs8',
         'PORT': '5432',
     }
 }
