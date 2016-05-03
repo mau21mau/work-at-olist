@@ -1,6 +1,8 @@
 import io
 import json
+import time
 import dicttoxml
+from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Category, Channel
@@ -21,7 +23,7 @@ def approach_one_view(request):
     else:
         form = ImportCsvForm()
     channels = Channel.objects.all()
-    return render(request, 'approachone.html', {'channels': channels, 'form': form})
+    return render(request, 'approachone.html', {'channels': channels, 'form': form}, content_type='text/html')
 
 
 """
@@ -32,6 +34,7 @@ def approach_one_view(request):
 
 
 def api_channel(request):
+    start = int(round(time.time() * 1000))
     key = request.GET.get('uuid', None)
     if not key:
         return HttpResponse('(404) Not Found :(', status=404)
@@ -42,23 +45,34 @@ def api_channel(request):
         category_tree = category.get_tree()
         channel_dict['categories'].append(category_tree)
 
+    end = int(round(time.time() * 1000))
+    if settings.DEBUG:
+        channel_dict['view_runtime'] = '%i ms (this value is shown when DEBUG is set True)' % (end - start)
+
     if request.GET.get('document', None) == 'xml':
         return HttpResponse(dicttoxml.dicttoxml(channel_dict), content_type='application/xml')
     return HttpResponse(json.dumps(channel_dict), content_type='application/json')
 
 
 def api_category(request):
+    start = int(round(time.time() * 1000))
     key = request.GET.get('uuid', None)
     if not key:
         return HttpResponse('(404) Not Found :(', status=404)
     category = Category.category_from_key(key)
     category_dict = category.get_tree()
+
+    end = int(round(time.time() * 1000))
+    if settings.DEBUG:
+        category_dict['view_runtime'] = '%i ms (this value is shown when DEBUG is set True)' % (end - start)
+
     if request.GET.get('document', None) == 'xml':
         return HttpResponse(dicttoxml.dicttoxml(category_dict), content_type='application/xml')
     return HttpResponse(json.dumps(category_dict), content_type='application/json')
 
 
 def api_channels(request):
+    start = int(round(time.time() * 1000))
     channels = Channel.objects.all()
     channels_list = []
     for channel in channels:
@@ -72,6 +86,9 @@ def api_channels(request):
             category_tree = category.get_tree()
             channel_dict['categories'].append(category_tree)
         channels_list.append(channel_dict)
+    end = int(round(time.time() * 1000))
+    if settings.DEBUG:
+        channels_list.append('view_runtime: %i ms (this value is shown when DEBUG is set True)' % (end - start))
 
     if request.GET.get('document', None) == 'xml':
         return HttpResponse(dicttoxml.dicttoxml(channels_list), content_type='application/json')
