@@ -39,15 +39,16 @@ def api_channel(request):
     if not key:
         return HttpResponse('(404) Not Found :(', status=404)
     channel = Channel.channel_from_key(key)
-    channel_dict = {'channelName': channel.name, 'categories': [], 'uuid': channel.id_key().decode("utf-8")}
+    channel_dict = {'data': {}, 'meta': ''}
+    channel_dict['data'] = {'channelName': channel.name, 'categories': [], 'uuid': channel.id_key().decode('utf-8')}
     root_categories = channel.category_set.filter(parent__isnull=True)
     for category in root_categories:
         category_tree = category.get_tree()
-        channel_dict['categories'].append(category_tree)
+        channel_dict['data']['categories'].append(category_tree)
 
     end = int(round(time.time() * 1000))
     if settings.DEBUG:
-        channel_dict['view_runtime'] = '%i ms (this value is shown when DEBUG is set True)' % (end - start)
+        channel_dict['meta'] = {'view_runtime': '%i ms.' % (end - start)}
 
     if request.GET.get('document', None) == 'xml':
         return HttpResponse(dicttoxml.dicttoxml(channel_dict), content_type='application/xml')
@@ -60,11 +61,12 @@ def api_category(request):
     if not key:
         return HttpResponse('(404) Not Found :(', status=404)
     category = Category.category_from_key(key)
-    category_dict = category.get_tree()
+    category_dict = {'data': {}, 'meta': ''}
+    category_dict['data'] = category.get_tree()
 
     end = int(round(time.time() * 1000))
     if settings.DEBUG:
-        category_dict['view_runtime'] = '%i ms (this value is shown when DEBUG is set True)' % (end - start)
+        category_dict['meta'] = {'view_runtime': '%i ms.' % (end - start)}
 
     if request.GET.get('document', None) == 'xml':
         return HttpResponse(dicttoxml.dicttoxml(category_dict), content_type='application/xml')
@@ -74,21 +76,21 @@ def api_category(request):
 def api_channels(request):
     start = int(round(time.time() * 1000))
     channels = Channel.objects.all()
-    channels_list = []
+    channels_list = {'data': [], 'meta': ''}
     for channel in channels:
         channel_dict = {
             'channelName': channel.name,
             'categories': [],
-            'uuid': channel.id_key().decode("utf-8"),
+            'uuid': channel.id_key().decode('utf-8'),
         }
         root_categories = channel.category_set.filter(parent__isnull=True)
         for category in root_categories:
             category_tree = category.get_tree()
             channel_dict['categories'].append(category_tree)
-        channels_list.append(channel_dict)
+        channels_list['data'].append(channel_dict)
     end = int(round(time.time() * 1000))
     if settings.DEBUG:
-        channels_list.append('view_runtime: %i ms (this value is shown when DEBUG is set True)' % (end - start))
+        channels_list['meta'] = {'view_runtime': '%i ms.' % (end - start)}
 
     if request.GET.get('document', None) == 'xml':
         return HttpResponse(dicttoxml.dicttoxml(channels_list), content_type='application/json')

@@ -3,17 +3,17 @@ function makeUL(list, categories) {
     list.appendChild(ul);
     ul = list.querySelectorAll('ul')[0];
     for (var i = 0; i < categories.length; i++) {
-        //var li = "<li data-categoryId='"+categories[i].uuid+"'>"+categories[i].name+"</li>";
-        var li = "<li class='channel' data-categoryId='"+categories[i].uuid+"'>"
-                    +"<label for='"+slugify(categories[i].name)+categories[i].uuid+"' class='menu_label'>"+categories[i].name
-                    +"<a class='call-api' href='/approachone/rest/category/?uuid="+categories[i].uuid+"'>=></a>"
+        var category = categories[i];
+        var li = "<li class='channel' data-categoryId='"+category.uuid+"'>"
+                    +"<label for='"+slugify(category.name)+category.uuid+"' class='menu_label'>"+category.name
+                    +"<a class='call-api' href='/approachone/rest/category/?uuid="+category.uuid+"'>=></a>"
                     +"</label>"
-                    +"<input type='checkbox' id='"+slugify(categories[i].name)+categories[i].uuid+"' />"
+                    +"<input type='checkbox' id='"+slugify(category.name)+category.uuid+"' />"
                 +"</li>";
         ul.insertAdjacentHTML('beforeend', li);
-        if (categories[i].children.length) {
-            li = document.querySelector("*[data-categoryId='"+categories[i].uuid+"']");
-            makeUL(li, categories[i].children);
+        if (category.children.length) {
+            li = document.querySelector("*[data-categoryId='"+category.uuid+"']");
+            makeUL(li, category.children);
         }
     }
 }
@@ -66,21 +66,21 @@ function updateChannels() {
     ajax.send('/approachone/rest/channels/', 'GET', null, true, function(data){
         if (data.status === 200) {
             var data = JSON.parse(data.responseText);
-            var channels = document.getElementById("channels");
-            channels.innerHTML = '';
-            for (var i = 0; i < data.length; i++) {
-                if (typeof(data[i]) === 'object') {
-                    var li = "<li class='channel' data-idChannel='"+data[i].uuid+"'>"
-                                +"<label for='"+slugify(data[i].channelName)+data[i].uuid+"' class='menu_label'>"+data[i].channelName
-                                +"<a class='call-api' href='/approachone/rest/channel/?uuid="+data[i].uuid+"'>=></a>"
-                                +"</label>"
-                                +"<input type='checkbox' id='"+slugify(data[i].channelName)+data[i].uuid+"' />"
-                            +"</li>";
-                    channels.insertAdjacentHTML('beforeend', li);
-                    if (data[i].categories.length) {
-                        li = document.querySelector("*[data-idChannel='"+data[i].uuid+"']");
-                        makeUL(li, data[i].categories);
-                    }
+            var channelsUL = document.getElementById("channels");
+            channelsUL.innerHTML = '';
+            channels = data.data;
+            for (var i = 0; i < channels.length; i++) {
+                var channel = channels[i];
+                var li = "<li class='channel' data-idChannel='"+channel.uuid+"'>"
+                            +"<label for='"+slugify(channel.channelName)+channel.uuid+"' class='menu_label'>"+channel.channelName
+                            +"<a class='call-api' href='/approachone/rest/channel/?uuid="+channel.uuid+"'>=></a>"
+                            +"</label>"
+                            +"<input type='checkbox' id='"+slugify(channel.channelName)+channel.uuid+"' />"
+                        +"</li>";
+                channelsUL.insertAdjacentHTML('beforeend', li);
+                if (channel.categories.length) {
+                    li = document.querySelector("*[data-idChannel='"+channel.uuid+"']");
+                    makeUL(li, channel.categories);
                 }
             }
         } else {
