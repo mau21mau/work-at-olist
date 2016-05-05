@@ -3,17 +3,20 @@ function makeUL(list, categories) {
     list.appendChild(ul);
     ul = list.querySelectorAll('ul')[0];
     for (var i = 0; i < categories.length; i++) {
-        var category = categories[i];
-        var li = "<li class='channel' data-categoryId='"+category.uuid+"'>"
-                    +"<label for='"+slugify(category.name)+category.uuid+"' class='menu_label'>"+category.name
-                    +"<a class='call-api' href='/approachone/rest/category/?uuid="+category.uuid+"'>=></a>"
+        var category = categories[i].data;
+        var categoryName = category.attributes.name;
+        var categoryId = category.uuid;
+        var categoryChildren = category.relationships.children;
+        var li = "<li class='channel' data-categoryId='"+categoryId+"'>"
+                    +"<label for='"+slugify(categoryName)+categoryId+"' class='menu_label'>"+categoryName
+                    +"<a class='call-api' href='/approachone/rest/category/?uuid="+categoryId+"'>=></a>"
                     +"</label>"
-                    +"<input type='checkbox' id='"+slugify(category.name)+category.uuid+"' />"
+                    +"<input type='checkbox' id='"+slugify(categoryName)+categoryId+"' />"
                 +"</li>";
         ul.insertAdjacentHTML('beforeend', li);
-        if (category.children.length) {
-            li = document.querySelector("*[data-categoryId='"+category.uuid+"']");
-            makeUL(li, category.children);
+        if (categoryChildren) {
+            li = document.querySelector("*[data-categoryId='"+categoryId+"']");
+            makeUL(li, categoryChildren);
         }
     }
 }
@@ -71,16 +74,18 @@ function updateChannels() {
             channels = data.data;
             for (var i = 0; i < channels.length; i++) {
                 var channel = channels[i];
-                var li = "<li class='channel' data-idChannel='"+channel.uuid+"'>"
-                            +"<label for='"+slugify(channel.channelName)+channel.uuid+"' class='menu_label'>"+channel.channelName
-                            +"<a class='call-api' href='/approachone/rest/channel/?uuid="+channel.uuid+"'>=></a>"
+                var channelName = channel.attributes.name;
+                var channelId = channel.uuid;
+                var li = "<li class='channel' data-idChannel='"+channelId+"'>"
+                            +"<label for='"+slugify(channelName)+channelId+"' class='menu_label'>"+channelName
+                            +"<a class='call-api' href='/approachone/rest/channel/?uuid="+channelId+"'>=></a>"
                             +"</label>"
-                            +"<input type='checkbox' id='"+slugify(channel.channelName)+channel.uuid+"' />"
+                            +"<input type='checkbox' id='"+slugify(channelName)+channelId+"' />"
                         +"</li>";
                 channelsUL.insertAdjacentHTML('beforeend', li);
-                if (channel.categories.length) {
-                    li = document.querySelector("*[data-idChannel='"+channel.uuid+"']");
-                    makeUL(li, channel.categories);
+                if (channel.relationships.categories.length) {
+                    li = document.querySelector("*[data-idChannel='"+channelId+"']");
+                    makeUL(li, channel.relationships.categories);
                 }
             }
         } else {
@@ -206,4 +211,9 @@ function moveProgressBar(percentage) {
         progress_val.style.color = '#FFFFFF';
     }
     progress_val.innerHTML = percentage+"%";
+    if (percentage == 100) {
+        var el = document.querySelector(".status");
+        el.innerHTML = "Processing file...";
+        el.style.display = 'block';
+    }
 }

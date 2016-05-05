@@ -39,12 +39,23 @@ def api_channel(request):
     if not key:
         return HttpResponse('(404) Not Found :(', status=404)
     channel = Channel.channel_from_key(key)
-    channel_dict = {'data': {}, 'meta': ''}
-    channel_dict['data'] = {'channelName': channel.name, 'categories': [], 'uuid': channel.id_key().decode('utf-8')}
+    channel_dict = {
+            'data': {
+            'type': 'channel',
+            'uuid': channel.id_key().decode('utf-8'),
+            'attributes': {
+                'name': channel.name,
+            },
+            'relationships': {
+                'categories': [],
+            },
+        },
+        'meta': '',
+    }
     root_categories = channel.category_set.filter(parent__isnull=True)
     for category in root_categories:
         category_tree = category.get_tree()
-        channel_dict['data']['categories'].append(category_tree)
+        channel_dict['data']['relationships']['categories'].append(category_tree)
 
     end = int(round(time.time() * 1000))
     if settings.DEBUG:
@@ -79,14 +90,19 @@ def api_channels(request):
     channels_list = {'data': [], 'meta': ''}
     for channel in channels:
         channel_dict = {
-            'channelName': channel.name,
-            'categories': [],
+            'type':'channel',
             'uuid': channel.id_key().decode('utf-8'),
+            'attributes': {
+                'name': channel.name
+            },
+            'relationships': {
+                'categories': [],
+            }
         }
         root_categories = channel.category_set.filter(parent__isnull=True)
         for category in root_categories:
             category_tree = category.get_tree()
-            channel_dict['categories'].append(category_tree)
+            channel_dict['relationships']['categories'].append(category_tree)
         channels_list['data'].append(channel_dict)
     end = int(round(time.time() * 1000))
     if settings.DEBUG:

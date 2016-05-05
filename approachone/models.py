@@ -27,7 +27,7 @@ class Category(models.Model):
 
     def get_tree(self):
         tree = self.get_children_recursive()
-        tree['parents'] = self.get_parents_recursive()
+        tree['data']['relationships']['parents'] = self.get_parents_recursive()
         return tree
 
     def get_children_recursive(self):
@@ -40,12 +40,20 @@ class Category(models.Model):
 
         children = self.children()
         tree = {
-            'name': self.name,
-            'children': [],
-            'uuid': self.id_key().decode("utf-8")
+            'data': {
+                'type': 'category',
+                'uuid': self.id_key().decode("utf-8"),
+                'attributes': {
+                    'name': self.name,
+                },
+                'relationships': {
+                    'children': [],
+                    'parents': [],
+                }
+            }
         }
         for child in children:
-            tree['children'].append(child.get_children_recursive())
+            tree['data']['relationships']['children'].append(child.get_children_recursive())
         return tree
 
     def get_parents_recursive(self, parents=None):
