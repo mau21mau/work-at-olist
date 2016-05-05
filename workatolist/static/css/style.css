@@ -107,7 +107,7 @@ p.tip {
     text-align: center;
 }
 
-.tree-wrapper-overlay {
+.tree-wrapper-overlay, .api-response-overlay {
     display: none;
     position: absolute;
     width: 100%;
@@ -217,14 +217,19 @@ ul.tree li.last {
     margin-left: 4px;
 }
 
-.call-api.all {
+.call-api:hover{
+    color: #D46A6A;
+}
+
+.call-api-main {
     display: block;
+    text-decoration: none;
     margin-left: -6px;
     color: #555;
     font-size: large;
 }
 
-.call-api:hover{
+.call-api-main:hover {
     color: #D46A6A;
 }
 

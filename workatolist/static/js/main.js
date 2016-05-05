@@ -62,6 +62,26 @@ var ajax = {
     },
 };
 
+function bindCallAPI(btn) {
+    btn.addEventListener('click', function(event){
+        var overlay = document.querySelector('.api-response-overlay');
+        overlay.style.display = 'block';
+        event.preventDefault();
+        var api_url = btn.href;
+        ajax.send(api_url, 'GET', null, true, function(data){
+            if (data.status === 200) {
+                $('#api-response').JSONView(data.responseText, {
+                    collapsed: true, nl2br: true, recursive_collapser: false
+                });
+                $('#api-url').attr("href", api_url);
+                $('#api-url').html(api_url);
+                $('#api-url').css('display', 'block');
+            }
+            overlay.style.display = 'none';
+        });
+    });
+}
+
 // Send request to the API to retrieve all channels available
 function updateChannels() {
     var overlay = document.querySelector(".tree-wrapper-overlay");
@@ -96,26 +116,14 @@ function updateChannels() {
 
         var buttons = document.getElementsByClassName('call-api');
         for (var i=0; i < buttons.length; i++) {
-            buttons[i].addEventListener('click', function(event){
-                event.preventDefault();
-                var api_url = this.href;
-                ajax.send(api_url, 'GET', null, true, function(data){
-                    if (data.status === 200) {
-                        $('#api-response').JSONView(data.responseText, {
-                            collapsed: true, nl2br: true, recursive_collapser: false
-                        });
-                        $('#api-url').attr("href", api_url);
-                        $('#api-url').html(api_url);
-                        $('#api-url').css('display', 'block');
-                    } else {
-
-                    }
-                });
-            });
+            bindCallAPI(buttons[i]);
         }
         $('#channels li:last-child').addClass('last');
     });
 }
+
+var callApiMain = document.querySelector('.call-api-main');
+bindCallAPI(callApiMain);
 
 updateChannels();
 
@@ -215,5 +223,8 @@ function moveProgressBar(percentage) {
         var el = document.querySelector(".status");
         el.innerHTML = "Processing file...";
         el.style.display = 'block';
+        $(bar).fadeTo(500, 0, function(){
+           $(bar).css("visibility", "hidden");
+        });
     }
 }
