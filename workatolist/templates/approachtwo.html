@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="content-wrapper">
+        <header class="header">
+            <button class="upload-button">
+                <svg class="upload-icon" viewBox="0 0 16 16">
+                  <path d="m 0,13.866667 13.714286,0 0,-3.2 2.285714,0 0,3.2 L 16,16 0,16 Z m 0,-3.2 2.2857143,0 0,3.2 -2.2857143,0 z m 10.285714,-5.3333337 0,7.4666667 -4.5714283,0 0,-7.4666667 -2.2857143,0 L 8,0 12.571429,5.3333333 Z m 0,0"/>
+                </svg>
+                UPLOAD CSV
+            </button>
+            <h1>Approach One</h1>
+            <p>This project's API follows the standards of JSON API found at <a href="http://jsonapi.org/">jsonapi.org</a></p>
+            <h2>Channel</h2>
+            <p>The API URL for displaying all the channels is <span class="docs">
+                <a href="approachone/rest/channels/">/approachone/rest/channels/?document=json</a></span>.
+            </p>
+            <p>The API url for displaying a single Channel is the following:</p>
+            <span class="docs">/approachone/rest/channel/?uid=key-for-the-channel&document=json</span>
+
+            <h2>Category</h2>
+            <p>The Category url for the rest api is the following:</p>
+            <span class="docs">/approachone/rest/category/?uid=key-for-the-category&document=json</span>
+
+            <p><b>PS.: </b>The values for <span class="docs">document</span> parameter are <span class="docs">json</span> or
+                <span class="docs">xml</span>. Being the first the default, so it's not mandatory.
+            </p>
+            <p class="tip"><b>*Tip:</b> click the little arrows beside the nodes on the tree to display the output from the REST API.</p>
+        </header>
+        <div id="tree-wrapper">
+            <div class="tree-wrapper-overlay"><div class="loading"><img src="/static/img/loading.gif" /></div></div>
+            <a class="call-api-main all" href="approachone/rest/channels/?document=json">All Channels =></a>
+            <ul id="channels" class="tree"></ul>
+        </div>
+        <div id="api-response-wrapper">
+            <div class="api-response-overlay"><div class="loading"><img src="/static/img/loading.gif" /></div></div>
+            <a id="api-url" href="" target="_blank"></a>
+            <pre id="api-response"></pre>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="form-upload">
+        <button class="close-button">X</button>
+        <span class="status">Upload complete!</span>
+        <div id="bar" class="light-blue-border"><span id="progress-value">0%</span>
+            <div id="progress"></div>
+        </div>
+        <form action="#">
+            <fieldset class="light-blue-border">
+                <legend>Upload CSV file</legend>
+                <span id="form-fields-container">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="field-wrapper{% if forloop.first %} first{% elif forloop.last %} last{% endif %}">
+                        <span class="error">{{ field.errors.as_text }}</span>
+                        {{ field.label_tag }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                </span>
+                <input type="submit" value="Send" id="sendfile">
+            </fieldset>
+        </form>
+    </div>
+    <div class="overlay"></div>
+{% endblock %}
+{% block script %}
+    <script src="/static/js/approachtwo.js"></script>
+{% endblock %}
